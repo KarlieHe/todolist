@@ -5,3 +5,11 @@ function toggleDeleteBtn(btnId){
         $("#" + btnId).hide();  // unchecked
 }
 
+
+$(document).ready(function(){
+    $('.menu-toggle').click(function(){
+      $('.container-switch').toggleClass('active');
+      $('#todolist').toggleClass('active');
+      $('.createBox').toggleClass('active');
+    })
+  })

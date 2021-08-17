@@ -3,11 +3,18 @@ const mongoose = require('mongoose');
 const capitalize = require('lodash.capitalize');
 const date = require(__dirname + '/getDate.js');
 
+
 const app = express();
 app.use(express.urlencoded());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-mongoose.connect('mongodb+srv://admin-Karlie:admin-Karlie@cluster0.xgrv4.mongodb.net/todolistDB', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+mongoose.connect('mongodb+srv://admin-Karlie:admin-Karlie@cluster0.xgrv4.mongodb.net/todolistDB', {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true, 
+    useFindAndModify: false
+});
+
+const day = date.getDate();
 
 const itemSchema = new mongoose.Schema({
     name: String
@@ -35,8 +42,11 @@ const List = mongoose.model('List', listSchema);
 
 var workItems =[];
 
+
+
+
+
 app.get('/', function (req, res) {
-    //var day = date.getDate();
 
     List.findOne({ name: 'Today'}, function(err, foundLists){
         const list = new List({
@@ -54,16 +64,23 @@ app.get('/', function (req, res) {
                 });   
             } else {
                 //show exist list
-                res.render('list', {
-                    listTitle: foundLists.name, 
-                    newListItems: foundLists.items
-                })
+                List.distinct('name', function(err, foundAllList){
+                    if(!err){
+                        res.render('list', {
+                        listTitle: foundLists.name, 
+                        newListItems: foundLists.items,
+                        day: day,
+                        allLists: foundAllList
+                    })
+                    } else {
+                        console.log(err);
+                    }
+                });
+                
             }
         }   
     })
 })
-
-
 
 app.get('/:customerListName', function(req, res) {
     const customerListName = capitalize(req.params.customerListName);
@@ -89,10 +106,18 @@ app.get('/:customerListName', function(req, res) {
                     
                 } else {
                     //show exist list
-                    res.render('list', {
-                        listTitle: foundLists.name, 
-                        newListItems: foundLists.items
-                    })
+                    List.distinct('name', function(err, foundAllList){
+                        if(!err){
+                            res.render('list', {
+                            listTitle: foundLists.name, 
+                            newListItems: foundLists.items,
+                            day: day,
+                            allLists: foundAllList
+                        })
+                        } else {
+                            console.log(err);
+                        }
+                    });
                 }
             }   
         });
@@ -139,8 +164,37 @@ app.post('/delete', function(req, res) {
     
 })
 
-app.get('/work', function (req, res){
-    res.render('list', {listTitle: "Work list", newListItems: workItems})
+app.post('/create', function (req, res){
+    // console.log(req.body.createTerm);
+    const createTerm = capitalize(req.body.createTerm);
+    if (createTerm === 'Today') {
+        res.redirect('/');
+    } else {
+        res.redirect('/' + createTerm);
+    }
+})
+
+app.post('/switch', function(req, res){
+    
+    const deleteList = req.body.deleteList;
+    const switchList = req.body.switchList;
+
+    if(deleteList === undefined){
+        if (switchList === 'Today') {
+            res.redirect('/');
+        } else {
+            res.redirect('/' + switchList);
+        }
+    } else {
+        List.deleteOne({ name: deleteList }, function(err){
+            if (!err) {
+                    res.redirect('/');   
+            } 
+        })
+        
+       
+    }
+    
 })
 
 app.listen(process.env.PORT || 3000, function () {

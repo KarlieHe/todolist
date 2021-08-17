@@ -1,0 +1,39 @@
+<section id="menu">
+    <div class="container">
+        <span class="brand-name">TooDo</span>
+        <div class="wrap">
+            <form action="/create" method="post">
+                <div class="createBox">
+                    <input class="createInput" type="text" placeholder="Create a new list" name="createTerm">
+                    <button class="createBtn" type="submit">Create</button>
+                </div>
+            </form>
+        </div>
+            <span class="day"><%= day %></span>
+            <div class="menu-toggle"><i class="fa fa-bars"></i></div>
+    </div>
+    <div class="container-switch">
+        <% allLists.forEach(allList => {%> 
+            <% if(allList === "Today"){ %>
+                <div class="switch-box">
+                    <form class="switchForm" action="/switch" method="post">
+                        <button class="switchBtn" type="submit" name="switchList" value="<%=allList%>">
+                            <%=allList%>
+                        </button>
+                    </form>
+                </div>
+            <% } else { %>
+                <div class="switch-box">
+                    <form class="switchForm" action="/switch" method="post">
+                        <button class="switchBtn" type="submit" name="switchList" value="<%=allList%>">
+                            <%=allList%>
+                        </button>
+                        <button class="switchBtn-delete" type="submit" name="deleteList" value="<%=allList%>">X</button>
+                    </form>
+                </div>
+            <% } %>
+            
+            
+        <% }) %>   
+    </div>
+</section>
