@@ -1,41 +1,43 @@
 <%- include('header'); -%>
-<%- include('menu'); -%>
-<section id="todolist">
-    <div>
-        <div class="box" id="heading">
-            <h1>
-                <%=listTitle%>
-            </h1>
-        </div>
-    
-        <div class="box">
-    
-            <% newListItems.forEach(function(newListItem){ %>
-    
-                <form action="/delete" method="post">
-                    <div class="item">
-                        <input class="checkbox <%=newListItem._id%>" type="checkbox" id="listItem" name="listItem"
-                            value="<%=newListItem._id%>" onchange="toggleDeleteBtn('<%=newListItem._id%>')">
-                        <p>
-                            <%=newListItem.name%>
-                        </p>
-                        <button class="deleteBtn" id="<%=newListItem._id%>" type="submit" name="listName"
-                            value="<%=listTitle%>"><i class="fas fa-2x fa-minus-circle delete-icon"></i></button>
-    
-                    </div>
-                    <!-- <input type="hidden" name="listName" value=""> -->
-                </form>
-    
-    
-    
-            <% }) %>
+    <%- include('menu'); -%>
+        <section id="todolist">
+            <div>
+                <div class="box" id="heading">
+                    <h1>
+                        <%=listTitle%>
+                    </h1>
+                </div>
 
-                <form class="item" action="/" method="post">
-                    <input class="addItem" type="text" name="newItem" placeholder="ex. Homework" />
-                    <button class="addBtn" type="submit" name="list" value="<%=listTitle%>" >+</button>
-                </form>
-        </div>
-    </div>
-</section>
-    
-<%- include('footer'); -%>
+                <div class="box">
+
+                    <% newListItems.forEach(function(newListItem){ %>
+
+                        <form action="/delete" method="post">
+                            <div class="item">
+                                <input class="checkbox <%=newListItem._id%>" type="checkbox" id="listItem" name="listItem" value="<%=newListItem._id%>" onchange="toggleDeleteBtn('<%=newListItem._id%>')">
+                                <p>
+                                    <%=newListItem.name%>
+                                </p>
+                                <button class="deleteBtn" id="<%=newListItem._id%>" type="submit" name="listName" value="<%=listTitle%>">
+                                    <i class="fa-solid fa-delete-left fa-lg"></i>
+                                </button>
+
+                            </div>
+                            <!-- <input type="hidden" name="listName" value=""> -->
+                        </form>
+
+
+
+                        <% }) %>
+
+                            <form action="/" method="post">
+                                <div class="item addItemBox">
+                                    <input class="addItem" type="text" name="newItem" placeholder="ex. Homework" />
+                                    <button class="addBtn" type="submit" name="list" value="<%=listTitle%>">+</button>
+                                </div>
+                            </form>
+                </div>
+            </div>
+        </section>
+
+        <%- include('footer'); -%>

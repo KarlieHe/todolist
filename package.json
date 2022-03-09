@@ -16,6 +16,7 @@
     "ejs-lint": "^1.2.1",
     "express": "^4.17.1",
     "lodash.capitalize": "^4.2.1",
-    "mongoose": "^5.13.3"
+    "mongoose": "^5.13.3",
+    "nodemon": "^2.0.15"
   }
 }
